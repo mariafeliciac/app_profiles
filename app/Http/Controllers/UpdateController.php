@@ -169,20 +169,21 @@ class UpdateController extends Controller
 
                     if (!$kno_delete) {
                         $knowledge_update = new Knowledge();
-                    };
 
-                    if (!empty(($knowledge['name']))) {
-                        $knowledge_update->description = $knowledge['name'];
+                        if (!empty(($knowledge['name']))) {
+                            $knowledge_update->description = $knowledge['name'];
+                        }
+
+                        if (!empty(($knowledge['level_id']))) {
+                            $knowledge_update->level_id = $knowledge['level_id'];
+                        }
+                        $knowledge_update->save();
                     }
 
-                    if (!empty(($knowledge['level_id']))) {
-                        $knowledge_update->level_id = $knowledge['level_id'];
-                    }
-                    $knowledge_update->save();
 
                     $kno_category = new KnowledgeCategory();
-                    $kno_category->knowledge_id = $knowledge_update->id;
-                    $kno_category->category_id = $user->profile->category->id;
+                    $kno_category->knowledge_id = isset($knowledge_update) ? $knowledge_update->id : $kno_delete->knowledge_id ;
+                    $kno_category->category_id = $category_id;
                     $kno_category->save();
                 }
             }
