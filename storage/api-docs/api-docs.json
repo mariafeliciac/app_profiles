@@ -223,77 +223,106 @@
                 }
             }
         },
-        "/user/update": {
-            "post": {
+        "/api/update-user/{user_id}": {
+            "put": {
                 "tags": [
-                    "User"
+                    "Update"
                 ],
-                "summary": "Aggiorna i dati di un utente con profilo e conoscenze",
-                "operationId": "ca4dd750b95d493f65ee1d67dfbe89c7",
+                "summary": "Aggiorna i dati di un utente esistente (query string o body)",
+                "operationId": "02b0777402977969e4e9c7a97a070b9c",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID dell'utente da aggiornare",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "firstname",
+                        "in": "query",
+                        "description": "Nome (come ?firstname=...)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "lastname",
+                        "in": "query",
+                        "description": "Cognome",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "birthday",
+                        "in": "query",
+                        "description": "Data di nascita (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "title_profile",
+                        "in": "query",
+                        "description": "Titolo profilo",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "level_profile_id",
+                        "in": "query",
+                        "description": "Livello profilo (1-3)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "requestBody": {
-                    "required": true,
+                    "description": "Alternativa: invio dei dati tramite JSON nel body",
+                    "required": false,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "user_id"
-                                ],
                                 "properties": {
-                                    "user_id": {
-                                        "description": "ID dell'utente da aggiornare",
-                                        "type": "integer",
-                                        "example": 1
-                                    },
                                     "firstname": {
-                                        "description": "Nome dell'utente",
-                                        "type": "string",
-                                        "example": "Mario"
+                                        "type": "string"
                                     },
                                     "lastname": {
-                                        "description": "Cognome dell'utente",
-                                        "type": "string",
-                                        "example": "Rossi"
+                                        "type": "string"
                                     },
                                     "birthday": {
-                                        "description": "Data di nascita",
                                         "type": "string",
-                                        "format": "date",
-                                        "example": "1990-01-01"
+                                        "format": "date"
                                     },
                                     "title_profile": {
-                                        "description": "Titolo del profilo",
-                                        "type": "string",
-                                        "example": "Sviluppatore"
+                                        "type": "string"
                                     },
                                     "level_profile_id": {
-                                        "description": "Livello del profilo",
-                                        "type": "integer",
-                                        "example": 2
+                                        "type": "integer"
                                     },
                                     "knowledges": {
-                                        "description": "Lista delle conoscenze con relativo livello: se nell'array non è presente l'id è perchè l'utente vuole aggiungere una nuova conoscenza",
                                         "type": "array",
                                         "items": {
-                                            "required": [
-                                                "id",
-                                                "name",
-                                                "level_id"
-                                            ],
                                             "properties": {
                                                 "id": {
-                                                    "description": "ID della conoscenza",
                                                     "type": "integer",
-                                                    "example": 10
+                                                    "nullable": true
                                                 },
                                                 "name": {
-                                                    "description": "Nome della conoscenza",
-                                                    "type": "string",
-                                                    "example": "CSS"
+                                                    "type": "string"
                                                 },
                                                 "level_id": {
-                                                    "description": "Livello della conoscenza (1-3)",
-                                                    "type": "integer",
-                                                    "example": 2
+                                                    "type": "integer"
                                                 }
                                             },
                                             "type": "object"
@@ -307,35 +336,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Utente aggiornato con successo",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Utente aggiornato correttamente"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Utente aggiornato con successo"
                     },
                     "422": {
-                        "description": "Validazione fallita",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "description": "Errore di validazione"
+                    },
+                    "404": {
+                        "description": "Utente non trovato"
                     }
                 }
             }
@@ -351,8 +358,8 @@
             "description": "Search"
         },
         {
-            "name": "User",
-            "description": "User"
+            "name": "Update",
+            "description": "Update"
         }
     ]
 }
