@@ -64,28 +64,25 @@ class UpdateController extends Controller
      *         description="Livello profilo (1-3)",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\RequestBody(
+     *    @OA\Parameter(
+     *         name="knowledges",
+     *         in="query",
      *         required=false,
-     *         description="Alternativa: invio dei dati tramite JSON nel body",
-     *         @OA\JsonContent(
+     *         style="deepObject",
+     *         explode=true,
+     *         description="Array di conoscenze, es: knowledges[0][id], knowledges[0][name], knowledges[0][level_id]",
+     *         @OA\Schema(
      *             type="object",
-     *             @OA\Property(property="firstname", type="string"),
-     *             @OA\Property(property="lastname", type="string"),
-     *             @OA\Property(property="birthday", type="string", format="date"),
-     *             @OA\Property(property="title_profile", type="string"),
-     *             @OA\Property(property="level_profile_id", type="integer"),
      *             @OA\Property(
-     *                 property="knowledges",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer", nullable=true),
-     *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="level_id", type="integer")
-     *                 )
+     *                 property="0",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="PHP"),
+     *                 @OA\Property(property="level_id", type="integer", example=2)
      *             )
      *         )
      *     ),
+
      *     @OA\Response(
      *         response=200,
      *         description="Utente aggiornato con successo"
