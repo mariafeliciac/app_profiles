@@ -160,6 +160,7 @@ class UpdateController extends Controller
                         if (!$kno_delete) {
                             throw new Exception('Non è possibie effettuare le modifiche sul seguente profilo utente.', 404);
                         }
+
                         $kno_delete->delete();
                     } else {
                         if (empty(($knowledge['name'])) && !empty(($knowledge['level_id']))) {
@@ -167,7 +168,9 @@ class UpdateController extends Controller
                         }
                     }
 
-                    if (!$kno_delete) {
+                    $check_knowledge = Knowledge::where('description', $knowledge['name'])->where('level_id', $knowledge['level_id'])->first();
+
+                    if (!$check_knowledge) {
                         $knowledge_update = new Knowledge();
 
                         if (!empty(($knowledge['name']))) {
@@ -178,11 +181,15 @@ class UpdateController extends Controller
                             $knowledge_update->level_id = $knowledge['level_id'];
                         }
                         $knowledge_update->save();
+
+                        $knowledge_id = $knowledge_update->id;
+
+                    } else {
+                        $knowledge_id = $check_knowledge->id;
                     }
 
-
                     $kno_category = new KnowledgeCategory();
-                    $kno_category->knowledge_id = isset($knowledge_update) ? $knowledge_update->id : $kno_delete->knowledge_id ;
+                    $kno_category->knowledge_id = $knowledge_id;
                     $kno_category->category_id = $category_id;
                     $kno_category->save();
                 }
