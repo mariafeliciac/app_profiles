@@ -167,11 +167,7 @@ class UpdateController extends Controller
                         }
                     }
 
-                    $knowledge_update = Knowledge::when($knowledge['name'], function ($query) use ($knowledge) {
-                        $query->where('description', $knowledge['name'])->where('level_id', $knowledge['level_id']);
-                    })->first();
-
-                    if (!$knowledge_update) {
+                    if (!$kno_delete) {
                         $knowledge_update = new Knowledge();
                     };
 
