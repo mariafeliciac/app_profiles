@@ -556,3 +556,6 @@
 [20604] Log opened at 2025-07-27 21:20:04.894566
 [20604] [Config] INFO: Trigger value for 'XDEBUG_TRIGGER' not found, falling back to 'XDEBUG_SESSION'
 [20604] [Config] INFO: Trigger value for 'XDEBUG_SESSION' not found, so not activating
+[13136] Log opened at 2025-07-27 22:31:28.689353
+[13136] [Config] INFO: Trigger value for 'XDEBUG_TRIGGER' not found, falling back to 'XDEBUG_SESSION'
+[13136] [Config] INFO: Trigger value for 'XDEBUG_SESSION' not found, so not activating

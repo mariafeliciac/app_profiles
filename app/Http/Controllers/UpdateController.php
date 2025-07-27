@@ -200,7 +200,7 @@ class UpdateController extends Controller
             return response($user_new);
         } catch (Exception $ex) {
             DB::rollBack();
-            return response($ex->getMessage(), 300 ?? $ex->getCode());
+            return response($ex->getMessage(),$ex->getCode());
         }
     }
 }
