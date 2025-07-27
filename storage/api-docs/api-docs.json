@@ -1,0 +1,358 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Nome della tua API",
+        "description": "Descrizione della tua API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/app/get-roles": {
+            "get": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Lista dei ruoli disponibili tra cui l'utente può scegliere in fase di registrazione",
+                "operationId": "75db59977ffca45a5e85b8a75e0a3c58",
+                "responses": {
+                    "200": {
+                        "description": "Lista dei ruoli",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "": {
+                                                "description": "name",
+                                                "type": "string",
+                                                "example": "utente"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/app/create-user": {
+            "post": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Crea un nuovo utente con profilo e conoscenze",
+                "operationId": "7ae97610c9a1c5c6536f2e7c0bb0939a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "firstname": {
+                                        "type": "string",
+                                        "example": "Mario"
+                                    },
+                                    "lastname": {
+                                        "type": "string",
+                                        "example": "Rossi"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "mario.rossi@example.com"
+                                    },
+                                    "birthday": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1980-01-01"
+                                    },
+                                    "title_profile": {
+                                        "type": "string",
+                                        "example": "Developer"
+                                    },
+                                    "level_profile_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "knowledges": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "PHP"
+                                                },
+                                                "level_id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utente creato con successo"
+                    },
+                    "422": {
+                        "description": "Errore di validazione dati"
+                    }
+                }
+            }
+        },
+        "/app/get-users": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Ricerca utenti filtrabili per nome, cognome, titolo profilo, conoscenze e livelli relativi",
+                "operationId": "6cd1ee057b43ce6af2bd8330d9124467",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Nome o cognome dell'utente",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "title_profile",
+                        "in": "query",
+                        "description": "Titolo del profilo",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "knowledge",
+                        "in": "query",
+                        "description": "Conoscenza specifica da cercare (es. CSS)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "level_knowledge",
+                        "in": "query",
+                        "description": "Livello della conoscenza (es. 1=Base, 2=Intermedio, 3=Avanzato)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ricerca effettuata con successo"
+                    },
+                    "422": {
+                        "description": "Errore di validazione dati"
+                    }
+                }
+            }
+        },
+        "/app/get-categories": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Ricerca categoria per descrizione della stessa",
+                "operationId": "8fe99892125df814ed205e7b28460842",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Nome categoria",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ricerca effettuata con successo"
+                    },
+                    "422": {
+                        "description": "Errore di validazione dati"
+                    }
+                }
+            }
+        },
+        "/app/get-knowledges": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Ricerca conoscenza/skills contenuta nel databse",
+                "operationId": "25aade78f6715e04a9c06e2e161ce006",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Nome skills",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ricerca effettuata con successo"
+                    },
+                    "422": {
+                        "description": "Errore di validazione dati"
+                    }
+                }
+            }
+        },
+        "/user/update": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Aggiorna i dati di un utente con profilo e conoscenze",
+                "operationId": "ca4dd750b95d493f65ee1d67dfbe89c7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "ID dell'utente da aggiornare",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "firstname": {
+                                        "description": "Nome dell'utente",
+                                        "type": "string",
+                                        "example": "Mario"
+                                    },
+                                    "lastname": {
+                                        "description": "Cognome dell'utente",
+                                        "type": "string",
+                                        "example": "Rossi"
+                                    },
+                                    "birthday": {
+                                        "description": "Data di nascita",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-01-01"
+                                    },
+                                    "title_profile": {
+                                        "description": "Titolo del profilo",
+                                        "type": "string",
+                                        "example": "Sviluppatore"
+                                    },
+                                    "level_profile_id": {
+                                        "description": "Livello del profilo",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "knowledges": {
+                                        "description": "Lista delle conoscenze con relativo livello: se nell'array non è presente l'id è perchè l'utente vuole aggiungere una nuova conoscenza",
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "id",
+                                                "name",
+                                                "level_id"
+                                            ],
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID della conoscenza",
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "name": {
+                                                    "description": "Nome della conoscenza",
+                                                    "type": "string",
+                                                    "example": "CSS"
+                                                },
+                                                "level_id": {
+                                                    "description": "Livello della conoscenza (1-3)",
+                                                    "type": "integer",
+                                                    "example": 2
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utente aggiornato con successo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Utente aggiornato correttamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validazione fallita",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Register",
+            "description": "Register"
+        },
+        {
+            "name": "Search",
+            "description": "Search"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
+}
