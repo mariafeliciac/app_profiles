@@ -16,11 +16,10 @@ class UpdateController extends Controller
 
     public function __construct() {}
 
-
     /**
      * @OA\Put(
      *     path="/app/update-user/{user_id}",
-     *     summary="Aggiorna i dati di un utente esistente (query string o body)",
+     *     summary="Aggiorna i dati di un utente esistente (dati semplici in query, conoscenze nel body)",
      *     tags={"Update"},
      *     @OA\Parameter(
      *         name="user_id",
@@ -64,21 +63,21 @@ class UpdateController extends Controller
      *         description="Livello profilo (1-3)",
      *         @OA\Schema(type="integer")
      *     ),
-     *    @OA\Parameter(
-     *         name="knowledges",
-     *         in="query",
+
+     *     @OA\RequestBody(
      *         required=false,
-     *         style="deepObject",
-     *         explode=true,
-     *         description="Array di conoscenze, es: knowledges[0][id], knowledges[0][name], knowledges[0][level_id]",
-     *         @OA\Schema(
-     *             type="object",
+     *         description="Conoscenze da aggiornare, come array di oggetti",
+     *         @OA\JsonContent(
+     *             required={"knowledges"},
      *             @OA\Property(
-     *                 property="0",
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="name", type="string", example="PHP"),
-     *                 @OA\Property(property="level_id", type="integer", example=2)
+     *                 property="knowledges",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=6),
+     *                     @OA\Property(property="name", type="string", example="Css"),
+     *                     @OA\Property(property="level_id", type="integer", example=3)
+     *                 )
      *             )
      *         )
      *     ),
@@ -97,7 +96,6 @@ class UpdateController extends Controller
      *     )
      * )
      */
-
 
 
     public function updateUser(Request $request)
@@ -183,7 +181,6 @@ class UpdateController extends Controller
                         $knowledge_update->save();
 
                         $knowledge_id = $knowledge_update->id;
-
                     } else {
                         $knowledge_id = $check_knowledge->id;
                     }

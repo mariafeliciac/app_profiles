@@ -263,7 +263,7 @@
                 "tags": [
                     "Update"
                 ],
-                "summary": "Aggiorna i dati di un utente esistente (query string o body)",
+                "summary": "Aggiorna i dati di un utente esistente (dati semplici in query, conoscenze nel body)",
                 "operationId": "f89ac58f801fe78f9609f874dfa6e272",
                 "parameters": [
                     {
@@ -320,38 +320,44 @@
                         "schema": {
                             "type": "integer"
                         }
-                    },
-                    {
-                        "name": "knowledges",
-                        "in": "query",
-                        "description": "Array di conoscenze, es: knowledges[0][id], knowledges[0][name], knowledges[0][level_id]",
-                        "required": false,
-                        "style": "deepObject",
-                        "explode": true,
-                        "schema": {
-                            "properties": {
-                                "0": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "PHP"
-                                        },
-                                        "level_id": {
-                                            "type": "integer",
-                                            "example": 2
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            },
-                            "type": "object"
-                        }
                     }
                 ],
+                "requestBody": {
+                    "description": "Conoscenze da aggiornare, come array di oggetti",
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "knowledges"
+                                ],
+                                "properties": {
+                                    "knowledges": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 6
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Css"
+                                                },
+                                                "level_id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Utente aggiornato con successo"
