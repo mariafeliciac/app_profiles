@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Knowledge;
 use App\Models\KnowledgeCategory;
+use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -45,6 +46,38 @@ class RegisterController extends Controller
 
         try {
             $roles = Role::get();
+
+            return response($roles);
+        } catch (Exception $e) {
+
+            return response($e->getMessage(), $e->getCode());
+        }
+    }
+
+
+    /**
+     * @OA\Get(
+     *     path="/app/get-levels",
+     *     summary="Lista dei livelli/gradi d'esperienza disponibili: junior, middle, senior",
+     *     tags={"Register"},
+     *     @OA\Response(response="200", 
+     *                  description="Lista dei livelli/gradi d'esperienza disponibili",
+     *                   @OA\JsonContent(
+     *                   type="array",
+     *                   @OA\Items(
+     *                   type="object",
+     *                   @OA\Property(property="id", type="integer", example=1),
+     *                   @OA\Property(description="description", type="string", example="junior")
+     *                   )
+     *         )
+     *  )
+     * )
+     */
+    public function getLevels()
+    {
+
+        try {
+            $roles = Level::get();
 
             return response($roles);
         } catch (Exception $e) {
@@ -128,11 +161,15 @@ class RegisterController extends Controller
             $category->save();
 
             foreach ($request->knowledges as $knowledge) {
-                $new_knowledge = new Knowledge();
-                $new_knowledge->description = $knowledge['name'];
-                $new_knowledge->level_id = $knowledge['level_id'];
+                $new_knowledge = Knowledge::where('description', $knowledge['name'])->where('level_id', $knowledge['level_id'])->first();
 
-                $new_knowledge->save();
+                if (!$new_knowledge) {
+                    $new_knowledge = new Knowledge();
+                    $new_knowledge->description = $knowledge['name'];
+                    $new_knowledge->level_id = $knowledge['level_id'];
+
+                    $new_knowledge->save();
+                }
 
                 $knowledge_rel_category = new KnowledgeCategory();
                 $knowledge_rel_category->knowledge_id = $new_knowledge->id;
@@ -177,6 +214,4 @@ class RegisterController extends Controller
             return response($e->getMessage(), $e->getCode());
         }
     }
-
-    
 }

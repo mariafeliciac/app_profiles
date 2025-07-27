@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/get-roles',[RegisterController::class, 'getRoles' ]);
 Route::post('/create-user',[RegisterController::class, 'createUser']);
+Route::get('/get-levels', [RegisterController::class,'getLevels']);
 
 Route::get('/get-users', [SearchController::class,'getUsers']);
 Route::get('/get-categories', [SearchController::class,'getCategories']);

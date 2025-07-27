@@ -19,7 +19,7 @@ class UpdateController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/update-user/{user_id}",
+     *     path="/app/update-user/{user_id}",
      *     summary="Aggiorna i dati di un utente esistente (query string o body)",
      *     tags={"Update"},
      *     @OA\Parameter(
@@ -150,22 +150,30 @@ class UpdateController extends Controller
                 }
             }
 
+            $category_id = $user->profile->category->id;
             if (!empty($request->knowledges)) {
 
                 foreach ($request->knowledges as $knowledge) {
 
-                    $knowledge_update = null;
                     if (!empty($knowledge['id'])) {
-                        $old_knowledge = Knowledge::where('id', $knowledge['id'])->first();
-                        $knowledge_update = $old_knowledge;
+                        $kno_delete = KnowledgeCategory::where('knowledge_id', $knowledge['id'])->where('category_id', $category_id)->first();
+                        if (!$kno_delete) {
+                            throw new Exception('Non è possibie effettuare le modifiche sul seguente profilo utente.', 404);
+                        }
+                        $kno_delete->delete();
                     } else {
                         if (empty(($knowledge['name'])) && !empty(($knowledge['level_id']))) {
                             throw new Exception("Per aggiungere una nuova conoscenza inserire sia il tipo che il livello della stessa.", 422);
                         }
-                        $new_knowledge = new Knowledge();
-                        $knowledge_update = $new_knowledge;
                     }
 
+                    $knowledge_update = Knowledge::when($knowledge['name'], function ($query) use ($knowledge) {
+                        $query->where('description', $knowledge['name'])->where('level_id', $knowledge['level_id']);
+                    })->first();
+
+                    if (!$knowledge_update) {
+                        $knowledge_update = new Knowledge();
+                    };
 
                     if (!empty(($knowledge['name']))) {
                         $knowledge_update->description = $knowledge['name'];
@@ -176,12 +184,10 @@ class UpdateController extends Controller
                     }
                     $knowledge_update->save();
 
-                    if (empty($knowledge['id'])) {
-                        $kno_category = new KnowledgeCategory();
-                        $kno_category->knowledge_id = $new_knowledge->id;
-                        $kno_category->category_id = $user->profile->category->id;
-                        $kno_category->save();
-                    }
+                    $kno_category = new KnowledgeCategory();
+                    $kno_category->knowledge_id = $knowledge_update->id;
+                    $kno_category->category_id = $user->profile->category->id;
+                    $kno_category->save();
                 }
             }
 
@@ -193,7 +199,7 @@ class UpdateController extends Controller
             return response($user_new);
         } catch (Exception $ex) {
             DB::rollBack();
-            return response($ex->getMessage(), $ex->getCode());
+            return response($ex->getMessage(), 300 ?? $ex->getCode());
         }
     }
 }

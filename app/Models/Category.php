@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\KnowledgeCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,7 @@ class Category extends Model
 
     public function knowledge()
     {
-        return $this->belongsToMany(Knowledge::class, 'knowledge_rel_category');
+        return $this->belongsToMany(Knowledge::class, 'knowledge_rel_category')
+           ->whereRaw('knowledge_rel_category.deleted_at IS NULL');
     }
 }

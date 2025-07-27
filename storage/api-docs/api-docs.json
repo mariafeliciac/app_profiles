@@ -41,6 +41,41 @@
                 }
             }
         },
+        "/app/get-levels": {
+            "get": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Lista dei livelli/gradi d'esperienza disponibili: junior, middle, senior",
+                "operationId": "f5d86207c42879c43eecf405b260dfd3",
+                "responses": {
+                    "200": {
+                        "description": "Lista dei livelli/gradi d'esperienza disponibili",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "": {
+                                                "description": "description",
+                                                "type": "string",
+                                                "example": "junior"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/app/create-user": {
             "post": {
                 "tags": [
@@ -223,13 +258,13 @@
                 }
             }
         },
-        "/api/update-user/{user_id}": {
+        "/app/update-user/{user_id}": {
             "put": {
                 "tags": [
                     "Update"
                 ],
                 "summary": "Aggiorna i dati di un utente esistente (query string o body)",
-                "operationId": "02b0777402977969e4e9c7a97a070b9c",
+                "operationId": "f89ac58f801fe78f9609f874dfa6e272",
                 "parameters": [
                     {
                         "name": "user_id",
@@ -285,55 +320,38 @@
                         "schema": {
                             "type": "integer"
                         }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Alternativa: invio dei dati tramite JSON nel body",
-                    "required": false,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "firstname": {
-                                        "type": "string"
-                                    },
-                                    "lastname": {
-                                        "type": "string"
-                                    },
-                                    "birthday": {
-                                        "type": "string",
-                                        "format": "date"
-                                    },
-                                    "title_profile": {
-                                        "type": "string"
-                                    },
-                                    "level_profile_id": {
-                                        "type": "integer"
-                                    },
-                                    "knowledges": {
-                                        "type": "array",
-                                        "items": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "nullable": true
-                                                },
-                                                "name": {
-                                                    "type": "string"
-                                                },
-                                                "level_id": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
+                    },
+                    {
+                        "name": "knowledges",
+                        "in": "query",
+                        "description": "Array di conoscenze, es: knowledges[0][id], knowledges[0][name], knowledges[0][level_id]",
+                        "required": false,
+                        "style": "deepObject",
+                        "explode": true,
+                        "schema": {
+                            "properties": {
+                                "0": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "PHP"
+                                        },
+                                        "level_id": {
+                                            "type": "integer",
+                                            "example": 2
                                         }
-                                    }
-                                },
-                                "type": "object"
-                            }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
                         }
                     }
-                },
+                ],
                 "responses": {
                     "200": {
                         "description": "Utente aggiornato con successo"
